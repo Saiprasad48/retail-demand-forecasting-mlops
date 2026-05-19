@@ -1,0 +1,26 @@
+project:
+  name: retail-demand-forecasting-mlops
+
+data:
+  raw_path: data/raw
+  processed_path: data/processed
+  train_file: train.csv
+  stores_file: stores.csv
+  holidays_file: holidays_events.csv
+  oil_file: oil.csv
+  transactions_file: transactions.csv
+
+model:
+  target: sales
+  test_size_days: 30
+  random_state: 42
+
+mlflow:
+  experiment_name: retail-demand-forecasting
+
+database:
+  host: localhost
+  port: 5432
+  name: retail_forecasting
+  user: retail_user
+  password: retail_pass

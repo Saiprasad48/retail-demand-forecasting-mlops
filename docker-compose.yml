@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: retail_forecast_db
+    environment:
+      POSTGRES_USER: retail_user
+      POSTGRES_PASSWORD: retail_pass
+      POSTGRES_DB: retail_forecasting
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
