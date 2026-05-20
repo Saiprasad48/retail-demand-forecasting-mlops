@@ -1,4 +1,5 @@
 from pathlib import Path
+from src.database.db import save_prediction
 import json
 import joblib
 import pandas as pd
@@ -159,7 +160,7 @@ def create_prediction_row(store_nbr, family, target_date, onpromotion):
     return row
 
 
-def predict_sales(store_nbr, family, target_date, onpromotion=0):
+def predict_sales(store_nbr, family, target_date, onpromotion=0, save_to_db=False):
     model, features, encoders = load_artifacts()
 
     row = create_prediction_row(
@@ -179,6 +180,17 @@ def predict_sales(store_nbr, family, target_date, onpromotion=0):
     prediction = model.predict(input_df)[0]
     prediction = max(float(prediction), 0)
 
+    if save_to_db:
+        prediction_id = save_prediction(
+            prediction_date=target_date,
+            store_nbr=store_nbr,
+            family=family,
+            predicted_sales=prediction,
+            model_name="lightgbm_v1",
+        )
+
+        print(f"Prediction saved to database with ID: {prediction_id}")
+
     return prediction
 
 
@@ -188,6 +200,7 @@ if __name__ == "__main__":
         family="GROCERY I",
         target_date="2017-08-16",
         onpromotion=10,
+        save_to_db=True,
     )
 
     print(f"Predicted sales: {result:.2f}")
