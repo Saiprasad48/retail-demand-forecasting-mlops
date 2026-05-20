@@ -15,13 +15,17 @@ data/raw/
 data/processed/
 
 # MLflow
-mlruns/
-mlartifacts/
+/mlruns/
+/mlartifacts/
+mlflow.db
 
-# Models
-models/
+# Model artifacts
+/models/
 *.pkl
 *.joblib
+
+# MLflow local database
+mlflow.db
 
 # Environment
 .env
