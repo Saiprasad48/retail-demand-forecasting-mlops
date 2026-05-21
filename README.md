@@ -550,12 +550,6 @@ The model training run is logged in MLflow with metrics, parameters, and model a
 
 ---
 
-### FastAPI Swagger Documentation
-
-FastAPI automatically generates interactive API documentation.
-
-![FastAPI Docs](results/fastapi_docs.png)
-
 ---
 
 ### Prediction API Response
@@ -581,12 +575,6 @@ Prediction outputs are stored in the PostgreSQL `predictions` table.
 ![PostgreSQL Predictions](results/postgres_predictions.png)
 
 ---
-
-### Project Structure
-
-The project follows a clean modular structure for data processing, feature engineering, model training, API serving, and database operations.
-
-![Project Structure](results/project_structure.png)
 
 ---
 
@@ -753,12 +741,6 @@ Possible future improvements:
 - GitHub Actions CI/CD
 - Data drift monitoring using Evidently AI
 - More advanced time series models
-
----
-
-## Resume Summary
-
-Built an end-to-end retail demand forecasting system using Python, Pandas, LightGBM, MLflow, FastAPI, PostgreSQL, and Docker. The system processes historical sales data, creates time-based forecasting features, trains a machine learning model, tracks experiments with MLflow, serves predictions through a FastAPI API, and stores prediction results in PostgreSQL.
 
 ---
 
