@@ -1,12 +1,9 @@
 from datetime import date, datetime
 from typing import List
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-
 from src.models.predict import predict_sales
 from src.database.db import save_prediction, get_recent_predictions
-
 
 app = FastAPI(
     title="Retail Demand Forecasting API",
@@ -14,13 +11,11 @@ app = FastAPI(
     version="1.0.0",
 )
 
-
 class PredictionRequest(BaseModel):
     prediction_date: date = Field(..., example="2017-08-16")
     store_nbr: int = Field(..., example=1)
     family: str = Field(..., example="GROCERY I")
     onpromotion: int = Field(default=0, example=10)
-
 
 class PredictionResponse(BaseModel):
     prediction_id: int
@@ -30,23 +25,18 @@ class PredictionResponse(BaseModel):
     predicted_sales: float
     model_name: str
 
-
 @app.get("/")
 def root():
     return {
         "message": "Retail Demand Forecasting API is running.",
         "docs": "/docs",
     }
-
-
 @app.get("/health")
 def health_check():
     return {
         "status": "healthy",
         "timestamp": datetime.now(),
     }
-
-
 @app.post("/predict", response_model=PredictionResponse)
 def predict(request: PredictionRequest):
     try:
@@ -57,7 +47,6 @@ def predict(request: PredictionRequest):
             onpromotion=request.onpromotion,
             save_to_db=False,
         )
-
         prediction_id = save_prediction(
             prediction_date=request.prediction_date,
             store_nbr=request.store_nbr,
@@ -65,7 +54,6 @@ def predict(request: PredictionRequest):
             predicted_sales=predicted_sales,
             model_name="lightgbm_v1",
         )
-
         return PredictionResponse(
             prediction_id=prediction_id,
             prediction_date=request.prediction_date,
@@ -74,21 +62,15 @@ def predict(request: PredictionRequest):
             predicted_sales=round(predicted_sales, 2),
             model_name="lightgbm_v1",
         )
-
     except Exception as error:
         raise HTTPException(status_code=400, detail=str(error))
-
-
 @app.get("/predictions")
 def recent_predictions(limit: int = 10):
     try:
         rows = get_recent_predictions(limit=limit)
-
         results = []
-
         for row in rows:
             row_dict = row._mapping
-
             results.append(
                 {
                     "id": row_dict["id"],
@@ -100,11 +82,9 @@ def recent_predictions(limit: int = 10):
                     "created_at": row_dict["created_at"],
                 }
             )
-
         return {
             "count": len(results),
             "predictions": results,
         }
-
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))

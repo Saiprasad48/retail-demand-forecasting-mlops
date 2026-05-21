@@ -10,7 +10,6 @@ import pandas as pd
 from lightgbm import LGBMRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, mean_squared_log_error
 
-
 PROCESSED_DATA_PATH = Path("data/processed")
 MODEL_PATH = Path("models")
 MODEL_PATH.mkdir(parents=True, exist_ok=True)
@@ -18,17 +17,13 @@ MODEL_PATH.mkdir(parents=True, exist_ok=True)
 
 def load_data():
     file_path = PROCESSED_DATA_PATH / "train_features.csv"
-
     if not file_path.exists():
         raise FileNotFoundError(
             "train_features.csv not found. Run src/features/build_features.py first."
         )
-
     df = pd.read_csv(file_path)
     df["date"] = pd.to_datetime(df["date"])
-
     return df
-
 
 def encode_categorical_columns(df):
     categorical_cols = [
@@ -39,28 +34,21 @@ def encode_categorical_columns(df):
         "holiday_type",
         "holiday_description",
     ]
-
     encoders = {}
-
     for col in categorical_cols:
         if col in df.columns:
             df[col] = df[col].astype(str)
             codes, uniques = pd.factorize(df[col])
             df[col] = codes
             encoders[col] = list(uniques)
-
     return df, encoders
-
 
 def train_test_split_by_date(df, test_days=30):
     max_date = df["date"].max()
     cutoff_date = max_date - pd.Timedelta(days=test_days)
-
     train_df = df[df["date"] <= cutoff_date].copy()
     test_df = df[df["date"] > cutoff_date].copy()
-
     return train_df, test_df, cutoff_date
-
 
 def get_features():
     return [
@@ -91,20 +79,16 @@ def get_features():
         "rolling_mean_28",
     ]
 
-
 def calculate_metrics(y_true, y_pred):
     y_pred = np.maximum(y_pred, 0)
-
     mae = mean_absolute_error(y_true, y_pred)
     rmse = np.sqrt(mean_squared_error(y_true, y_pred))
     rmsle = np.sqrt(mean_squared_log_error(y_true, y_pred))
-
     return {
         "mae": mae,
         "rmse": rmse,
         "rmsle": rmsle,
     }
-
 
 def train_model():
     df = load_data()
