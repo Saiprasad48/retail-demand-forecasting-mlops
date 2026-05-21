@@ -550,8 +550,6 @@ The model training run is logged in MLflow with metrics, parameters, and model a
 
 ---
 
----
-
 ### Prediction API Response
 
 The `/predict` endpoint returns predicted sales and saves the result to PostgreSQL.
@@ -565,16 +563,6 @@ The `/predict` endpoint returns predicted sales and saves the result to PostgreS
 The `/predictions` endpoint returns recent prediction records from the database.
 
 ![Predictions Response](results/predictions_response.png)
-
----
-
-### PostgreSQL Prediction Table
-
-Prediction outputs are stored in the PostgreSQL `predictions` table.
-
-![PostgreSQL Predictions](results/postgres_predictions.png)
-
----
 
 ---
 
